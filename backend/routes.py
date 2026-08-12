@@ -26,6 +26,7 @@ def create_todo(todo:CreateTodo,db:Session=Depends(get_db)):
     new_todo = Todos(
         **todo.model_dump()
     )
+    
     db.add(new_todo)
     db.commit()
     db.refresh(new_todo)
