@@ -1,61 +1,61 @@
-# FastAPI + React Todo App
+# TodoApp
 
-A full-stack Todo application built with **React** on the frontend and **FastAPI** on the backend. Today's work focused on connecting the frontend to the backend, implementing CRUD operations, and organizing the React API/state logic into a separate module.
+A full-stack Todo application built with **React** and **FastAPI**, backed by **SQLAlchemy** and **SQLite**.
+
+The project demonstrates a complete frontend-to-backend CRUD workflow, including validation, sorting, editing, completion updates, and database persistence.
+
+## Architecture
+
+```text
+React UI
+   │
+   │ HTTP / REST
+   ▼
+FastAPI
+   │
+   │ SQLAlchemy ORM
+   ▼
+SQLite
+```
+
+## Features
+
+- Create, read, update, and delete Todos
+- Mark Todos as completed
+- Edit existing Todo titles
+- Sort by ID or title
+- Validate empty Todo titles
+- Prevent duplicate Todo titles
+- Persist data through SQLAlchemy
+- Separate frontend API/state logic from UI rendering
 
 ## Tech Stack
 
-* React
-* Vite
-* Tailwind CSS
-* FastAPI
-* Python
-* SQLAlchemy
-* SQLite
-* REST API
-* JavaScript
+| Layer | Technology |
+| --- | --- |
+| Frontend | React, JavaScript, Vite, Tailwind CSS |
+| Backend | FastAPI, Python |
+| ORM | SQLAlchemy |
+| Database | SQLite |
+| API | REST |
 
-## Today's Progress
+## API Operations
 
-### React
-
-Implemented:
-
-* Fetching Todo data from FastAPI
-* Creating new Todos
-* Editing existing Todos
-* Updating Todo completion status
-* Deleting Todos
-* Controlled form inputs with `useState`
-* Fetching initial data with `useEffect`
-* Duplicate Todo title validation
-* Empty input validation
-* Edit mode using `editid`
-* Sorting Todo data
-* Separated API/state logic from UI
-
-### FastAPI
-
-Connected the React frontend to the FastAPI backend through REST endpoints.
-
-Implemented API operations for:
-
-* `GET` → Fetch Todos
-* `POST` → Create Todo
-* `PUT` → Update Todo
-* `DELETE` → Delete Todo
-
-The React application communicates with the FastAPI backend using `fetch()`.
+| Method | Purpose |
+| --- | --- |
+| `GET` | Retrieve Todos |
+| `POST` | Create a Todo |
+| `PUT` | Update a Todo |
+| `DELETE` | Delete a Todo |
 
 ## Project Structure
 
 ```text
 project/
-│
 ├── frontend/
-│   ├── src/
-│   │   ├── Todo.jsx
-│   │   └── ApiHandling.jsx
-│   └── ...
+│   └── src/
+│       ├── Todo.jsx
+│       └── ApiHandling.jsx
 │
 └── backend/
     ├── main.py
@@ -65,209 +65,59 @@ project/
         └── todos.py
 ```
 
-## React API Handling
+## Frontend Design
 
-Instead of putting API requests directly inside `Todo.jsx`, the application uses `ApiHandling.jsx` to contain the state and API-related logic.
-
-The component receives the required values and functions:
-
-```js
-const {
-  data,
-  title,
-  editid,
-  settitle,
-  formhandler,
-  edithandler,
-  updateCompleted,
-  deletehandler,
-} = ApiHandling();
-```
-
-This keeps `Todo.jsx` focused mainly on rendering the UI.
+API requests and related state logic are separated from the main Todo UI. This keeps the presentation component focused on rendering and user interaction while the API layer handles communication and state operations.
 
 ## CRUD Flow
 
-### Create
-
 ```text
-User enters Todo
-        ↓
-React form
-        ↓
-POST request
-        ↓
-FastAPI
-        ↓
-Database
-        ↓
-New Todo returned
-        ↓
-React state updated
+React UI → REST Request → FastAPI → SQLAlchemy → SQLite
+                                      ↓
+                                 JSON Response
+                                      ↓
+                                    React UI
 ```
-
-### Read
-
-```text
-React loads
-    ↓
-GET request
-    ↓
-FastAPI
-    ↓
-Database
-    ↓
-Todo data
-    ↓
-setData()
-    ↓
-UI
-```
-
-### Update
-
-The same `PUT` operation is used for editing the title and changing the completion status.
-
-```text
-User clicks Edit
-        ↓
-Todo title loaded into input
-        ↓
-User changes title
-        ↓
-PUT request
-        ↓
-FastAPI updates database
-        ↓
-Updated Todo returned
-        ↓
-React updates state
-```
-
-### Delete
-
-```text
-User clicks Delete
-        ↓
-DELETE request
-        ↓
-FastAPI
-        ↓
-Database record deleted
-        ↓
-React removes Todo from state
-```
-
-## Sorting
-
-Added a sorting dropdown with four options:
-
-```text
-ID ascending
-ID descending
-Title A-Z
-Title Z-A
-```
-
-Sorting is performed on the frontend because all Todo data is already available in React state.
-
-The original array is preserved using:
-
-```js
-const sortedData = [...data].sort(...)
-```
-
-This avoids directly mutating React state.
 
 ## Validation
 
-The application checks:
+The application validates empty Todo titles and duplicate titles. Duplicate checking also excludes the Todo currently being edited.
 
-* Empty Todo titles
-* Duplicate Todo titles
-* Duplicate checking while excluding the Todo currently being edited
+## Key Engineering Concepts
 
-Example:
+- REST API design
+- HTTP methods and status codes
+- FastAPI route handling
+- Pydantic validation
+- SQLAlchemy ORM
+- Database sessions
+- React state management
+- Controlled forms
+- Async API requests
+- Separation of concerns
+- Frontend/backend integration
 
-```js
-if (
-  i.id !== editid &&
-  i.title.toLowerCase() === trimmedTitle.toLowerCase()
-) {
-  window.alert(`${trimmedTitle} already exists`);
-  return;
-}
-```
+## Getting Started
 
-## Key React Concepts Practiced
+### Prerequisites
 
-* `useState`
-* `useEffect`
-* Controlled inputs
-* Event handling
-* Form submission
-* Array `map()`
-* Array `find()`
-* Array `filter()`
-* Array `sort()`
-* Async/await
-* `fetch()`
-* Conditional rendering
-* State updates
-* Component separation
+- Python
+- Node.js and npm
 
-## Key Backend Concepts Practiced
+### Backend
 
-* FastAPI routes
-* HTTP methods
-* Request bodies
-* JSON
-* REST API communication
-* CRUD operations
-* Database interaction
-* Pydantic models
-* SQLAlchemy
-* React ↔ FastAPI communication
+Install the Python dependencies used by the project and start the FastAPI application using the configured application entry point.
 
-## What I Learned Today
+### Frontend
 
-The main concept was understanding that React does not directly modify the database.
+Install the frontend dependencies and start the Vite development server.
 
-The actual flow is:
+## Status
 
-```text
-React
-  ↓
-HTTP Request
-  ↓
-FastAPI
-  ↓
-SQLAlchemy
-  ↓
-Database
-```
+**Completed:** Core React + FastAPI Todo CRUD workflow with database persistence, validation, sorting, and frontend/backend integration.
 
-After the backend completes the operation, it sends a response back:
+## Author
 
-```text
-Database
-  ↓
-FastAPI
-  ↓
-JSON Response
-  ↓
-React
-  ↓
-setData()
-  ↓
-UI
-```
+**Jakeer**
 
-This helped clarify the difference between **React state** and **database state**.
-
-
-## Current Status
-
-**React + FastAPI Todo CRUD: Completed**
-
-The application can now communicate with the backend, persist Todo data in the database, and perform the complete CRUD workflow from the React interface.
+GitHub: [@jakeer939](https://github.com/jakeer939)
